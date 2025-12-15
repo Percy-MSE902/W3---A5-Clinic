@@ -1,0 +1,58 @@
+class Patient:
+    def __init__(self, patient_id, name, age, phone):
+        self.patient_id = patient_id
+        self.name = name
+        self.age = age
+        self.phone = phone
+
+    def display_info(self):
+        print(f"ID: {self.patient_id}, Name: {self.name}, Age: {self.age}, Phone: {self.phone}")
+
+class Specialisation:
+    def __init__(self, spec_id, spec_name):
+        self.spec_id = spec_id
+        self.spec_name = spec_name
+
+class Doctor:
+    def __init__(self, doctor_id, name):
+        self.doctor_id = doctor_id
+        self.name = name
+        self.specialisations = []  # Many-to-Many relation
+
+    def add_specialisation(self, spec):
+        self.specialisations.append(spec)
+
+# Example of data
+patients_list = [
+    Patient(1, "John Doe", 70, "555-1111"),
+    Patient(2, "Jane Smith", 60, "555-2222"),
+    Patient(3, "Bob Brown", 68, "555-3333"),
+]
+
+spec_ophthalmology = Specialisation(1, "Ophthalmology")
+spec_cardiology = Specialisation(2, "Cardiology")
+
+doctors_list = [
+    Doctor(1, "Dr. Alice"),
+    Doctor(2, "Dr. Bob"),
+    Doctor(3, "Dr. Carol"),
+]
+
+doctors_list[0].add_specialisation(spec_ophthalmology)
+doctors_list[1].add_specialisation(spec_cardiology)
+doctors_list[2].add_specialisation(spec_ophthalmology)
+doctors_list[2].add_specialisation(spec_cardiology)
+
+# Display of senior patient
+for patient in patients_list: # assume patients_list is list of Patient objects
+    if patient.age > 65:
+        patient.display_info()
+
+# Display of number of Ophthalmology doctor
+count = 0
+for doctor in doctors_list:
+    for spec in doctor.specialisations:
+        if spec.spec_name.lower() == "ophthalmology": #protect the wrong spelling
+            count += 1
+            break  #count only 1 doctor
+print(f"Total doctors specialised in Ophthalmology: {count}")
